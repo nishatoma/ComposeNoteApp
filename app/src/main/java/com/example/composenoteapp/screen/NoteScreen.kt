@@ -22,21 +22,19 @@ import androidx.compose.ui.unit.dp
 import com.example.composenoteapp.R
 import com.example.composenoteapp.component.NoteButton
 import com.example.composenoteapp.component.NoteInputText
-import com.example.composenoteapp.ui.theme.NoteScreeButtonTitle
-import com.example.composenoteapp.ui.theme.NoteScreenTextFieldDescription
-import com.example.composenoteapp.ui.theme.NoteScreenTextFieldTitle
+import com.example.composenoteapp.ui.theme.StringConstants
 import com.example.composenoteapp.ui.theme.TopAppBarColor
 
 @ExperimentalComposeUiApi
 @Composable
 fun NoteScreen() {
 
-    var title = remember {
-        mutableStateOf("")
+    val title = remember {
+        mutableStateOf(StringConstants.NOTE_SCREEN_EMPTY_STRING)
     }
 
-    var description = remember {
-        mutableStateOf("")
+    val description = remember {
+        mutableStateOf(StringConstants.NOTE_SCREEN_EMPTY_STRING)
     }
 
     Column(modifier = Modifier.padding(6.dp)) {
@@ -53,20 +51,17 @@ fun NoteScreen() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             NoteInputText(text = title.value,
-                label = NoteScreenTextFieldTitle,
+                label = StringConstants.NOTE_SCREEN_TEXT_FIELD_TITLE,
                 onTextChange = {
-//                    if (it.all { char ->
-//                            char.isLetter() || char.isWhitespace()
-//                        }) title.value = it
                     changeNoteContent(it, title)
                 })
             NoteInputText(text = description.value,
-                label = NoteScreenTextFieldDescription, onTextChange = {
+                label = StringConstants.NOTE_SCREEN_TEXT_FIELD_DESCRIPTION, onTextChange = {
                     changeNoteContent(it, description)
                 })
             Spacer(modifier = Modifier.padding(8.dp))
             // Button
-            NoteButton(text = NoteScreeButtonTitle, onClick = {
+            NoteButton(text = StringConstants.NOTE_SCREEN_BUTTON_TITLE, onClick = {
                 // TODO: Implement Add NOTE functionality
             })
 
@@ -76,6 +71,12 @@ fun NoteScreen() {
     }
 }
 
+/**
+ * Checks if the character typed is a letter or white space.
+ * Displays it in the text field if so.
+ * @param it the string we wish to display in text field
+ * @param state the state of the text field
+ */
 private fun changeNoteContent(it: String, state: MutableState<String>) {
     if (it.all { char ->
             char.isLetter() || char.isWhitespace()
@@ -85,7 +86,6 @@ private fun changeNoteContent(it: String, state: MutableState<String>) {
         state.value = state.value
     }
 }
-
 
 @ExperimentalComposeUiApi
 @Preview(showBackground = true)
