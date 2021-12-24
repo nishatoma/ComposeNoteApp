@@ -9,3 +9,4 @@ val Teal200 = Color(0xFF03DAC5)
 
 // App colors
 val TopAppBarColor = Color(0xFFDADFE3)
+val NoteBackGroundColor = Color(0xFFDFE6EB)
