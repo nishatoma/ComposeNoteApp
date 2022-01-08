@@ -1,5 +1,6 @@
 package com.example.composenoteapp.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -19,6 +20,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -30,6 +33,8 @@ import com.example.composenoteapp.model.Note
 import com.example.composenoteapp.ui.theme.NoteBackGroundColor
 import com.example.composenoteapp.ui.theme.StringConstants
 import com.example.composenoteapp.ui.theme.StringConstants.NOTE_ENTRY_DATE_FORMAT
+import com.example.composenoteapp.ui.theme.StringConstants.NOTE_SCREEN_ADDED_TOAST
+import com.example.composenoteapp.ui.theme.StringConstants.NOTE_SCREEN_REMOVED_TOAST
 import com.example.composenoteapp.ui.theme.TopAppBarColor
 import java.time.format.DateTimeFormatter
 
@@ -49,6 +54,11 @@ fun NoteScreen(
     val description = remember {
         mutableStateOf(StringConstants.NOTE_SCREEN_EMPTY_STRING)
     }
+
+    // To get a context
+    val context = LocalContext.current
+
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     Column(modifier = Modifier.padding(6.dp)) {
         // Top Bar
@@ -76,16 +86,23 @@ fun NoteScreen(
             // Button
             NoteButton(text = StringConstants.NOTE_SCREEN_BUTTON_TITLE, onClick = {
                 if (title.value.isNotEmpty() && description.value.isNotEmpty()) {
+                    onAddNote(Note(title = title.value,
+                        description = description.value))
                     title.value = ""
                     description.value = ""
+                    Toast.makeText(context, NOTE_SCREEN_ADDED_TOAST, Toast.LENGTH_SHORT).show()
+                    keyboardController?.hide()
                 }
             })
 
         }
-        Divider(modifier = Modifier.padding(10.dp))
+        Divider(modifier = Modifier .padding(10.dp))
         LazyColumn {
             items(notes) { note ->
-                NoteRow(note = note, onNoteClicked = {})
+                NoteRow(note = note, onNoteClicked = {
+                    onRemoveNote(note)
+                    Toast.makeText(context, NOTE_SCREEN_REMOVED_TOAST, Toast.LENGTH_SHORT).show()
+                })
             }
         }
 
@@ -108,7 +125,7 @@ fun NoteRow(
         elevation = 6.dp
     ) {
         Column(modifier = Modifier
-            .clickable { }
+            .clickable { onNoteClicked(note) }
             .padding(horizontal = 14.dp, vertical = 6.dp),
         horizontalAlignment = Alignment.Start) {
             Text(text = note.title,
@@ -116,7 +133,6 @@ fun NoteRow(
             Text(text = note.description, style = MaterialTheme.typography.subtitle1)
             Text(text = note.entryDate.format(DateTimeFormatter.ofPattern(NOTE_ENTRY_DATE_FORMAT)),
             style = MaterialTheme.typography.caption)
-
         }
 
     }

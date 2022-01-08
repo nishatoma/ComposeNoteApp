@@ -41,7 +41,6 @@ fun NoteInputText(
         }),
         modifier = modifier
     )
-
 }
 
 @Composable
@@ -51,13 +50,12 @@ fun NoteButton(
     onClick: () -> Unit,
     enabled: Boolean = true
 ) {
-    Button(onClick = onClick,
-    shape = CircleShape,
-    enabled = enabled,
-    modifier = modifier) {
-
+    Button(
+        onClick = onClick,
+        shape = CircleShape,
+        enabled = enabled,
+        modifier = modifier
+    ) {
         Text(text)
-
     }
-
 }

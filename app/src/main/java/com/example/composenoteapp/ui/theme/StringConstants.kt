@@ -10,4 +10,6 @@ object StringConstants {
     const val NOTE_SCREEN_BUTTON_TITLE = "Add Note!"
     const val NOTE_SCREEN_EMPTY_STRING = ""
     const val NOTE_ENTRY_DATE_FORMAT = "EEE, d MMM"
+    const val NOTE_SCREEN_ADDED_TOAST = "Note added!"
+    const val NOTE_SCREEN_REMOVED_TOAST = "Note removed!"
 }
